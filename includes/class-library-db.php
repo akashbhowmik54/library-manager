@@ -13,7 +13,6 @@ class Library_DB {
 		global $wpdb;
 		self::$table_name = $wpdb->prefix . 'library_books';
 
-		// Add DB version option if missing
 		if ( get_option( 'library_db_version' ) !== self::$version ) {
 			self::create_table();
 			update_option( 'library_db_version', self::$version );

@@ -17,18 +17,13 @@ define( 'LM_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
 
 // Include required files
 require_once LM_PLUGIN_DIR . 'includes/class-library-activator.php';
-require_once LM_PLUGIN_DIR . 'includes/class-library-deactivator.php';
 
 require_once LM_PLUGIN_DIR . 'includes/class-library-db.php';
 require_once LM_PLUGIN_DIR . 'includes/class-library-rest.php';
 require_once LM_PLUGIN_DIR . 'includes/class-library-admin.php';
-require_once LM_PLUGIN_DIR . 'includes/helpers.php';
 
-// Activation/Deactivation Hooks
 register_activation_hook( __FILE__, [ 'Library_Activator', 'activate' ] );
-register_deactivation_hook( __FILE__, [ 'Library_Deactivator', 'deactivate' ] );
 
-// Initialize plugin
 add_action( 'plugins_loaded', 'lm_initialize_plugin' );
 
 function lm_initialize_plugin() {

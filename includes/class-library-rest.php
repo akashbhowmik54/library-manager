@@ -24,7 +24,7 @@ class Library_REST {
 			array(
 				'methods'             => WP_REST_Server::READABLE,
 				'callback'            => array( __CLASS__, 'get_books' ),
-				'permission_callback' => '__return_true', // public readable
+				'permission_callback' => '__return_true', 
 				'args'                => self::get_collection_params(),
 			),
 			array(
@@ -67,9 +67,6 @@ class Library_REST {
 		) );
 	}
 
-	/**
-	 * Permission callback for mutating requests
-	 */
 	public static function permission_check_edit_posts( $request ) {
 		if ( ! current_user_can( 'edit_posts' ) ) {
 			return new WP_Error(
@@ -81,9 +78,6 @@ class Library_REST {
 		return true;
 	}
 
-	/**
-	 * Collection params (filters & pagination)
-	 */
 	public static function get_collection_params() {
 		return array(
 			'status'   => array(
@@ -116,9 +110,6 @@ class Library_REST {
 		);
 	}
 
-	/**
-	 * Schema / args for POST and PUT
-	 */
 	public static function get_item_schema() {
 		return array(
 			'title' => array(
@@ -150,16 +141,10 @@ class Library_REST {
 		);
 	}
 
-	/**
-	 * Sanitize description using wp_kses_post
-	 */
 	public static function sanitize_description( $value ) {
 		return wp_kses_post( $value );
 	}
 
-	/**
-	 * GET /books
-	 */
 	public static function get_books( $request ) {
 		$params = array();
 
@@ -185,35 +170,27 @@ class Library_REST {
 			$params['year'] = intval( $year );
 		}
 
-		// Use DB module to fetch results (may return array of objects)
 		$items = Library_DB::get_books( $params );
 
 		if ( ! is_array( $items ) ) {
-			// If DB layer returns WP_Error or false, map to error
 			return new WP_Error( 'db_error', 'Failed to retrieve books.', array( 'status' => 500 ) );
 		}
 
 		$total = count( $items );
 
-		// Simple pagination using array_slice (safe fallback if DB module doesn't implement SQL pagination)
 		$offset = ( $page - 1 ) * $per_page;
 		$paginated = array_slice( $items, $offset, $per_page );
 
-		// Format items for API response (sanitize for output)
 		$data = array_map( array( __CLASS__, 'format_book_for_response' ), $paginated );
 
 		$response = new WP_REST_Response( $data, 200 );
 
-		// Add pagination headers
 		$response->header( 'X-WP-Total', $total );
 		$response->header( 'X-WP-TotalPages', (int) ceil( $total / $per_page ) );
 
 		return $response;
 	}
 
-	/**
-	 * GET /books/{id}
-	 */
 	public static function get_book( $request ) {
 		$id = intval( $request->get_param( 'id' ) );
 
@@ -228,9 +205,6 @@ class Library_REST {
 		return new WP_REST_Response( $data, 200 );
 	}
 
-	/**
-	 * POST /books
-	 */
 	public static function create_book( $request ) {
 		$body = $request->get_json_params();
 		if ( empty( $body ) ) {
@@ -248,7 +222,6 @@ class Library_REST {
 			return new WP_Error( 'db_insert_failed', 'Failed to create book.', array( 'status' => 500 ) );
 		}
 
-		// Get inserted ID (wpdb->insert returns number of rows — get insert id)
 		global $wpdb;
 		$created_id = $wpdb->insert_id;
 
@@ -258,9 +231,6 @@ class Library_REST {
 		return new WP_REST_Response( $data, 201 );
 	}
 
-	/**
-	 * PUT /books/{id}
-	 */
 	public static function update_book( $request ) {
 		$id = intval( $request->get_param( 'id' ) );
 
@@ -291,9 +261,6 @@ class Library_REST {
 		return new WP_REST_Response( $data, 200 );
 	}
 
-	/**
-	 * DELETE /books/{id}
-	 */
 	public static function delete_book( $request ) {
 		$id = intval( $request->get_param( 'id' ) );
 
@@ -308,7 +275,6 @@ class Library_REST {
 			return new WP_Error( 'db_delete_failed', 'Failed to delete book.', array( 'status' => 500 ) );
 		}
 
-		// Return 204 (no content) as successful delete
 		return new WP_REST_Response( null, 204 );
 	}
 
@@ -323,24 +289,20 @@ class Library_REST {
 	private static function validate_item_payload( $data, $require_title = true ) {
 		$clean = array();
 
-		// title
 		if ( isset( $data['title'] ) ) {
 			$clean['title'] = sanitize_text_field( $data['title'] );
 		} elseif ( $require_title ) {
 			return new WP_Error( 'missing_title', 'Title is required.', array( 'status' => 400 ) );
 		}
 
-		// description
 		if ( isset( $data['description'] ) ) {
 			$clean['description'] = wp_kses_post( $data['description'] );
 		}
 
-		// author
 		if ( isset( $data['author'] ) ) {
 			$clean['author'] = sanitize_text_field( $data['author'] );
 		}
 
-		// publication_year
 		if ( isset( $data['publication_year'] ) && $data['publication_year'] !== '' ) {
 			if ( ! is_numeric( $data['publication_year'] ) ) {
 				return new WP_Error( 'invalid_year', 'publication_year must be an integer.', array( 'status' => 400 ) );
@@ -348,7 +310,6 @@ class Library_REST {
 			$clean['publication_year'] = intval( $data['publication_year'] );
 		}
 
-		// status
 		if ( isset( $data['status'] ) ) {
 			$status = sanitize_text_field( $data['status'] );
 			if ( ! in_array( $status, self::$allowed_status, true ) ) {
@@ -367,7 +328,6 @@ class Library_REST {
 	 * @return array
 	 */
 	private static function format_book_for_response( $item ) {
-		// $item may be stdClass (from $wpdb) or array
 		$book = array(
 			'id'               => isset( $item->id ) ? intval( $item->id ) : ( isset( $item['id'] ) ? intval( $item['id'] ) : 0 ),
 			'title'            => isset( $item->title ) ? wp_kses_post( $item->title ) : '',

@@ -35,7 +35,7 @@ class Library_Admin {
 	 * Register top-level admin menu
 	 */
 	public static function register_menu() {
-		$capability = 'edit_posts'; // match REST permission requirement for mutating actions
+		$capability = 'edit_posts'; 
 
 		/**
 		 * add_menu_page returns the $hook_suffix which we store to limit script loading
@@ -67,7 +67,6 @@ class Library_Admin {
 	}
 	
 	public static function enqueue_admin_assets( $hook ) {
-		// Only enqueue on our plugin admin page
 		if ( empty( self::$page_hook ) || $hook !== self::$page_hook ) {
 			return;
 		}
@@ -75,7 +74,6 @@ class Library_Admin {
 		$plugin_dir = dirname( dirname( __FILE__ ) ) . '/admin';
 		$plugin_url = plugin_dir_url( dirname( __FILE__ ) ) . 'admin/';
 
-		// Expected production build files
 		$js_bundle_path  = $plugin_dir . '/build/assets/index-TedKnzMW.js';
 		$css_bundle_path = $plugin_dir . '/build/assets/index-CFnJL99V.css';
 
