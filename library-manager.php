@@ -22,6 +22,11 @@ require_once LM_PLUGIN_DIR . 'includes/class-library-db.php';
 require_once LM_PLUGIN_DIR . 'includes/class-library-rest.php';
 require_once LM_PLUGIN_DIR . 'includes/class-library-admin.php';
 
+if ( defined( 'WP_CLI' ) && WP_CLI ) {
+    require_once plugin_dir_path(__FILE__) . 'includes/class-library-cli.php';
+    WP_CLI::add_command( 'library', 'Library_CLI_Commands' );
+}
+
 register_activation_hook( __FILE__, [ 'Library_Activator', 'activate' ] );
 
 add_action( 'plugins_loaded', 'lm_initialize_plugin' );
