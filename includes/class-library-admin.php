@@ -65,12 +65,7 @@ class Library_Admin {
 		</div>
 		<?php
 	}
-
-	/**
-	 * Enqueue admin JS/CSS only on the plugin admin page
-	 *
-	 * @param string $hook The current admin page hook suffix
-	 */
+	
 	public static function enqueue_admin_assets( $hook ) {
 		// Only enqueue on our plugin admin page
 		if ( empty( self::$page_hook ) || $hook !== self::$page_hook ) {
@@ -78,14 +73,14 @@ class Library_Admin {
 		}
 
 		$plugin_dir = dirname( dirname( __FILE__ ) ) . '/admin';
-		$plugin_url = plugin_dir_url( dirname( __FILE__ ) . '/../' ) . 'admin/';
+		$plugin_url = plugin_dir_url( dirname( __FILE__ ) ) . 'admin/';
 
 		// Expected production build files
-		$js_bundle_path  = $plugin_dir . '/build/index.js';
-		$css_bundle_path = $plugin_dir . '/build/index.css';
+		$js_bundle_path  = $plugin_dir . '/build/assets/index.js';
+		$css_bundle_path = $plugin_dir . '/build/assets/index.css';
 
-		$js_bundle_url  = $plugin_url . 'build/index.js';
-		$css_bundle_url = $plugin_url . 'build/index.css';
+		$js_bundle_url  = $plugin_url . 'build/assets/index.js';
+		$css_bundle_url = $plugin_url . 'build/assets/index.css';
 
 		// If build files don't exist, still register a small inline script to avoid breaking console, but show admin notice
 		if ( file_exists( $js_bundle_path ) ) {
