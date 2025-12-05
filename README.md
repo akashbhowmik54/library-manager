@@ -83,7 +83,19 @@ JSON[
 ]
 All endpoints return proper HTTP status codes (200, 201, 204, 400, 403, 404, 500) and structured JSON.
 
-Database Table Schema
+# Database Table Schema
+
+CREATE TABLE {$wpdb->prefix}library_books (
+  id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+  title VARCHAR(255) NOT NULL,
+  description LONGTEXT,
+  author VARCHAR(255),
+  publication_year INT,
+  status ENUM('available','borrowed','unavailable') DEFAULT 'available',
+  created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+  updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 Table name: wp_library_books (or with custom prefix)
 All queries use $wpdb->prepare() and prepared statements.
