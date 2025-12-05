@@ -76,17 +76,15 @@ class Library_Admin {
 		$plugin_url = plugin_dir_url( dirname( __FILE__ ) ) . 'admin/';
 
 		// Expected production build files
-		$js_bundle_path  = $plugin_dir . '/build/assets/index.js';
-		$css_bundle_path = $plugin_dir . '/build/assets/index.css';
+		$js_bundle_path  = $plugin_dir . '/build/assets/index-TedKnzMW.js';
+		$css_bundle_path = $plugin_dir . '/build/assets/index-CFnJL99V.css';
 
-		$js_bundle_url  = $plugin_url . 'build/assets/index.js';
-		$css_bundle_url = $plugin_url . 'build/assets/index.css';
+		$js_bundle_url  = $plugin_url . 'build/assets/index-TedKnzMW.js';
+		$css_bundle_url = $plugin_url . 'build/assets/index-CFnJL99V.css';
 
-		// If build files don't exist, still register a small inline script to avoid breaking console, but show admin notice
 		if ( file_exists( $js_bundle_path ) ) {
 			$version = filemtime( $js_bundle_path );
 
-			// Use 'wp-element' to ensure React is available in WP admin for simple apps; if bundle supplies its own runtime that's fine.
 			wp_register_script(
 				'library-admin-app',
 				$js_bundle_url,
@@ -95,7 +93,6 @@ class Library_Admin {
 				true
 			);
 
-			// If CSS exists, enqueue it
 			if ( file_exists( $css_bundle_path ) ) {
 				$css_version = filemtime( $css_bundle_path );
 				wp_enqueue_style(
@@ -106,7 +103,6 @@ class Library_Admin {
 				);
 			}
 
-			// Localize script with REST base url and nonce
 			$rest_base = rest_url( 'library/v1' );
 			$nonce     = wp_create_nonce( 'wp_rest' );
 
@@ -116,14 +112,13 @@ class Library_Admin {
 				array(
 					'rest_url'  => untrailingslashit( $rest_base ),
 					'nonce'     => $nonce,
-					'api_root'  => esc_url_raw( rest_url() ), // optional: full WP REST root
+					'api_root'  => esc_url_raw( rest_url() ), 
 					'page_slug' => self::$page_slug,
 				)
 			);
 
 			wp_enqueue_script( 'library-admin-app' );
 		} else {
-			// Register a tiny placeholder script so JS errors don't break other admin JS. The admin notice will explain the missing build.
 			wp_register_script(
 				'library-admin-app-placeholder',
 				'',
@@ -139,7 +134,7 @@ class Library_Admin {
 	 * If the React build is missing, show an admin notice so developer knows to build the app
 	 */
 	public static function maybe_show_build_notice() {
-		// Only show on plugin admin page
+
 		$screen = get_current_screen();
 		if ( ! $screen || $screen->id !== 'toplevel_page_' . self::$page_slug ) {
 			return;
@@ -151,9 +146,8 @@ class Library_Admin {
 			<div class="notice notice-warning">
 				<p>
 					<?php
-					/* translators: 1: build directory path */
 					printf(
-						esc_html__( 'Library Manager: React build not found. Please run the production build and place it in %s/admin/build.', 'library-manager' ),
+						esc_html__( 'Library Manager: React build not found.', 'library-manager' ),
 						esc_html( dirname( LM_PLUGIN_DIR ) )
 					);
 					?>
