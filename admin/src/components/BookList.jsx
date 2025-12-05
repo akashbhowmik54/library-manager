@@ -44,7 +44,7 @@ export default function BookList({ onAdd, onEdit }) {
       <div style={{ marginBottom: "15px" }}>
         <input
           type="text"
-          placeholder="Search by title or author..."
+          placeholder="Search by Title or Author..."
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           style={{
