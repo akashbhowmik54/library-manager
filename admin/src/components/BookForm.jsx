@@ -67,7 +67,7 @@ export default function BookForm({ type, onBack, bookId }) {
 
       <div className="form-group">
         <label>Publication Year</label>
-        <input name="publication_year" value={form.publication_year} onChange={handleChange} />
+        <input type="number" name="publication_year" value={form.publication_year} onChange={handleChange} />
       </div>
 
       <div className="form-group">

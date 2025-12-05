@@ -8,9 +8,6 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 class Library_REST {
 
-	/**
-	 * Allowed status values (mirror DB enum)
-	 */
 	private static $allowed_status = array( 'available', 'borrowed', 'unavailable' );
 
 	public static function init() {

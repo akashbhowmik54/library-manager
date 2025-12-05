@@ -74,10 +74,10 @@ class Library_Admin {
 		$plugin_dir = dirname( dirname( __FILE__ ) ) . '/admin';
 		$plugin_url = plugin_dir_url( dirname( __FILE__ ) ) . 'admin/';
 
-		$js_bundle_path  = $plugin_dir . '/build/assets/index-DRcgZHuD.js';
+		$js_bundle_path  = $plugin_dir . '/build/assets/index-BP28fuv_.js';
 		$css_bundle_path = $plugin_dir . '/build/assets/index-CFnJL99V.css';
 
-		$js_bundle_url  = $plugin_url . 'build/assets/index-DRcgZHuD.js';
+		$js_bundle_url  = $plugin_url . 'build/assets/index-BP28fuv_.js';
 		$css_bundle_url = $plugin_url . 'build/assets/index-CFnJL99V.css';
 
 		if ( file_exists( $js_bundle_path ) ) {
