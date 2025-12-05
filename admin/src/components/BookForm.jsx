@@ -41,7 +41,7 @@ export default function BookForm({ type, onBack, bookId }) {
       await apiPut(`/books/${bookId}`, form);
     }
 
-    onBack(); // go back to list
+    onBack(); 
   };
 
   if (loading) return <Loader />;
