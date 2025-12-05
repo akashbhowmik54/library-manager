@@ -31,11 +31,11 @@ A fully functional WordPress plugin that manages a library of books using:
 
    git clone https://github.com/akashbhowmik54/library-manager.git
 
-Option A – Install via ZIP
+- Option A – Install via ZIP
 Zip the library-manager folder
 In WordPress Admin → Plugins → Add New → Upload Plugin → Choose the ZIP → Install & Activate
 
-Option B – Manual install
+- Option B – Manual install
 Copy the library-manager folder into /wp-content/plugins/
 Activate the plugin from the WordPress Plugins page
 
@@ -102,7 +102,7 @@ All queries use $wpdb->prepare() and prepared statements.
 
 # Bonus Features Implemented
 
-Filtering on book list
-Search bar in React admin
-Status color coding
-WP-CLI command:Bashwp library import sample.json
+- Filtering on book list
+- Search bar in React admin
+- Status color coding
+- WP-CLI command:Bashwp library import sample.json
